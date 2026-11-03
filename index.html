@@ -164,11 +164,11 @@ body{min-height:100vh;}
 .ix-table tr.ix-soon td{opacity:.42;}
 .ix-table tr.ix-soon td.ix-date::before{content:'예정 ';color:var(--g-yellow);font-weight:700;}
 .ix-head{position:relative;}
-.ix-logo{display:block;}
+.ix-foot{position:relative;}
+.ix-logo{position:absolute;right:0;bottom:0;display:block;}
 .ix-logo:empty{display:none;}
-.ix-logo img{display:block;height:28px;width:auto;}
-.ix-foot-row{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:6px;}
-.ix-foot-row .ix-contact{margin:0;}
+.ix-logo img{display:block;height:32px;width:auto;}
+@container (max-width:640px){.ix-logo{position:static;margin-top:10px;}}
 @container (max-width:640px){.ix-head{padding-top:42px;}}
 .ix-mascot{position:absolute;z-index:2;right:max(0px,calc(50% - 580px));top:96px;width:calc(clamp(84px,19cqi,175px) * var(--s,1));pointer-events:none;filter:drop-shadow(0 0 12px rgba(255,255,255,.35)) drop-shadow(0 10px 10px rgba(0,0,0,.5));}
 .ix-mascot img{display:block;width:100%;height:auto;}
@@ -347,10 +347,8 @@ export default league;</pre>
   <div class="ix-foot">
     <p class="ix-coin">INSERT COIN ▶</p>
     <p class="ix-foot-ko">연수를 열 때마다 내 순위와 우리 지역 게이지가 올라가요. 연수 후 단톡에 꼭 공유해주세요!</p>
-    <div class="ix-foot-row">
-      <div class="ix-logo" data-draw="brand-logo" data-source="brand"></div>
-      <p class="ix-contact">💌 문의 마이클팀 양수정 팀장(010-2460-1264)</p>
-    </div>
+    <p class="ix-contact">💌 문의 마이클팀 양수정 팀장(010-2460-1264)</p>
+    <div class="ix-logo" data-draw="brand-logo" data-source="brand"></div>
   </div>
 </div>
 
