@@ -48,8 +48,7 @@ body{min-height:100vh;}
 .ix-kicker{margin:0;font-family:var(--g-mono);font-weight:700;font-size:clamp(14px,2.6cqi,22px);letter-spacing:.06em;color:var(--g-cyan);text-shadow:0 0 12px rgba(59,164,255,.6);}
 .ix-title{margin:10px 0 0;width:100%;display:flex;justify-content:center;}
 .ix-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;}
-.ix-title-art{position:relative;width:min(100%,780px);display:flex;justify-content:center;align-items:flex-end;min-height:clamp(110px,26cqi,230px);filter:drop-shadow(0 0 22px rgba(255,140,0,.35));}
-.ix-title-art canvas{image-rendering:pixelated;}
+.ix-title-art{position:relative;width:min(100%,760px);display:flex;justify-content:center;align-items:flex-end;min-height:clamp(110px,26cqi,230px);transform:perspective(720px) rotateX(16deg);transform-origin:50% 100%;filter:drop-shadow(0 0 18px rgba(255,200,40,.3)) drop-shadow(0 10px 14px rgba(0,0,0,.45));}
 .ix-title-art canvas{display:block;max-width:100%;height:auto;}
 .ix-slogan{margin:18px 0 0;font-weight:900;font-size:clamp(22px,4.4cqi,36px);color:#fff;text-shadow:0 2px 0 #000;}
 .ix-take{margin:0;max-width:44rem;font-weight:700;font-size:clamp(14px,2.2cqi,19px);line-height:1.6;color:#fff;text-shadow:0 1px 0 #000;}
@@ -142,14 +141,16 @@ body{min-height:100vh;}
 @media (prefers-reduced-motion:no-preference){
 .ix-spark{animation:ix-twinkle 2.4s ease-in-out infinite;}
 .ix-spark.s2{animation-delay:.6s;}.ix-spark.s3{animation-delay:1.2s;}.ix-spark.s4{animation-delay:1.8s;}
-.ix-title-art{animation:ix-flicker 5s steps(1) infinite;}
+.ix-title-art{animation:ix-power .9s .3s steps(9) backwards,ix-attract 7s 1.5s steps(1) infinite,ix-glow 2.6s ease-in-out infinite alternate;}
 .ix-coin,.ix-rwait{animation:ix-blink 1.1s steps(1) infinite;}
 .ix-pod.m1 .ix-crown-box{animation:ix-bob 1.6s steps(2) infinite;}
 .ix-anim .ix-rfill{animation:ix-grow .7s steps(8) both;}
 .ix-anim .ix-mbar{animation:ix-rise .7s steps(8) both;transform-box:fill-box;transform-origin:bottom;}
 @keyframes ix-twinkle{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.35;transform:scale(.6);}}
 @keyframes ix-float{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
-@keyframes ix-flicker{0%,100%{opacity:1;}91%{opacity:1;}92%{opacity:.82;}93%{opacity:1;}96%{opacity:.9;}97%{opacity:1;}}
+@keyframes ix-power{from{clip-path:inset(0 0 100% 0);}to{clip-path:inset(0 0 0 0);}}
+@keyframes ix-attract{0%,86%,100%{opacity:1;}88%{opacity:.12;}90%{opacity:1;}92%{opacity:.12;}94%{opacity:1;}}
+@keyframes ix-glow{from{filter:drop-shadow(0 0 10px rgba(255,200,40,.2)) drop-shadow(0 10px 14px rgba(0,0,0,.45));}to{filter:drop-shadow(0 0 30px rgba(255,170,30,.6)) drop-shadow(0 10px 14px rgba(0,0,0,.45));}}
 .ix-hud-blink{animation:ix-blink 1s steps(1) infinite;}
 @keyframes ix-blink{0%{opacity:1;}50%{opacity:.25;}}
 @keyframes ix-bob{0%{transform:translateY(0);}50%{transform:translateY(-3px);}}
@@ -845,54 +846,47 @@ dash.draw('title-art', (el) => {
     while (bot > top && !on[bot].some(Boolean)) bot--;
     return { align: ln.align, cells: on.slice(top, bot + 1), cols: c.width };
   });
-  const gapRows = 2, depth = 2;
-  const cols = Math.max(...grids.map((g) => g.cols)) + 4;
-  const rows = grids.reduce((s, g) => s + g.cells.length, 0) + gapRows * (grids.length - 1) + 4;
-  const avail = Math.min(el.clientWidth || 600, 780);
-  const cell = Math.max(3, Math.min(11, Math.floor(avail / (cols + depth))));
+  const gapRows = 3, depth = 4;
+  const cols = Math.max(...grids.map((g) => g.cols)) + 2;
+  const rows = grids.reduce((s, g) => s + g.cells.length, 0) + gapRows * (grids.length - 1) + 2;
+  const avail = Math.min(el.clientWidth || 600, 760);
+  const cell = Math.max(3, Math.min(9, Math.floor(avail / (cols + depth))));
   const dpr = window.devicePixelRatio || 1;
-  const W = (cols + depth) * cell, H = (rows + depth) * cell;
+  const W = Math.ceil((cols + depth) * cell), H = Math.ceil((rows + depth) * cell);
   const cv = document.createElement('canvas');
   cv.width = Math.round(W * dpr);
   cv.height = Math.round(H * dpr);
   cv.style.width = W + 'px';
   const ctx = cv.getContext('2d');
   ctx.scale(dpr, dpr);
-  ctx.imageSmoothingEnabled = false;
   const dots = [];
-  const on = new Set();
-  let y0 = 2;
+  let y0 = 1;
   grids.forEach((g) => {
-    const off = g.align === 'right' ? cols - 2 - g.cols : Math.floor((cols - g.cols) / 2);
-    const h = g.cells.length;
-    g.cells.forEach((row, r) => row.forEach((v, q) => {
-      if (!v) return;
-      const c = off + q, rr = y0 + r;
-      dots.push({ c, r: rr, t: h > 1 ? r / (h - 1) : 0 });
-      on.add(c + ',' + rr);
-    }));
-    y0 += h + gapRows;
+    const off = g.align === 'right' ? cols - 1 - g.cols : Math.floor((cols - g.cols) / 2);
+    g.cells.forEach((row, r) => row.forEach((v, q) => { if (v) dots.push([off + q, y0 + r]); }));
+    y0 += g.cells.length + gapRows;
   });
-  const sq = (c, r, dx, dy, grow) => ctx.rect(c * cell + dx - grow, r * cell + dy - grow, cell + grow * 2, cell + grow * 2);
-  const paint = (color, dx, dy, grow, filter) => {
+  const baseX = depth * cell * 0.3;
+  const layer = (dx, dy, rad, color) => {
     ctx.fillStyle = color;
     ctx.beginPath();
-    for (const d of dots) if (!filter || filter(d)) sq(d.c, d.r, dx, dy, grow);
+    for (const [c, r] of dots) {
+      const cx = baseX + (c + 0.5) * cell + dx, cy = (r + 0.5) * cell + dy;
+      ctx.moveTo(cx + rad, cy);
+      ctx.arc(cx, cy, rad, 0, Math.PI * 2);
+    }
     ctx.fill();
   };
-  const ol = Math.max(1, Math.round(cell * 0.45));
-  for (let k = depth; k >= 0; k--) paint('#1a0500', k * cell, k * cell, ol);
-  for (let k = depth; k >= 1; k--) paint(k === depth ? '#7a0d05' : '#C2200F', k * cell, k * cell, 0);
-  const bands = [[0.3, '#FFF35C'], [0.55, '#FFC21A'], [0.8, '#FF8A00'], [1.01, '#FF5200']];
-  let lo = -1;
-  bands.forEach(([hi, color]) => { const a = lo; paint(color, 0, 0, 0, (d) => d.t > a && d.t <= hi); lo = hi; });
-  ctx.fillStyle = '#FFFDE0';
-  ctx.beginPath();
-  for (const d of dots) if (!on.has(d.c + ',' + (d.r - 1))) ctx.rect(d.c * cell, d.r * cell, cell, Math.max(1, Math.round(cell * 0.35)));
-  ctx.fill();
+  const R = cell * 0.43;
+  for (let k = depth; k >= 1; k--) {
+    const color = k === depth ? '#8E0F07' : k === 1 ? '#FF6A13' : '#E0261B';
+    layer(-k * cell * 0.28, k * cell * 0.55, R, color);
+  }
+  layer(0, 0, R, '#FFE03A');
+  layer(-cell * 0.13, -cell * 0.13, cell * 0.15, '#FFF7C2');
   ctx.globalCompositeOperation = 'source-atop';
-  ctx.fillStyle = 'rgba(0,0,0,.22)';
-  for (let y = 0; y < H; y += Math.max(2, Math.round(cell / 2))) ctx.fillRect(0, y, W, 1);
+  ctx.fillStyle = 'rgba(0,0,0,.18)';
+  for (let y = 0; y < H; y += 3) ctx.fillRect(0, y, W, 1);
   ctx.globalCompositeOperation = 'source-over';
   el.replaceChildren(cv);
 });
