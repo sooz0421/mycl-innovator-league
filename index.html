@@ -41,10 +41,15 @@ body{min-height:100vh;}
 .ix-spark.s3{top:96px;right:16%;width:26px;height:26px;}
 .ix-spark.s4{top:300px;right:8%;width:12px;height:12px;}
 .ix-head{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;}
+.ix-hud{display:flex;justify-content:center;gap:clamp(14px,5cqi,48px);margin:0 0 6px;font-family:var(--g-mono);font-weight:900;letter-spacing:.08em;font-size:clamp(11px,1.9cqi,15px);}
+.ix-hud-i{display:flex;flex-direction:column;align-items:center;gap:2px;}
+.ix-hud-k{color:#FF4D4D;text-shadow:0 0 8px rgba(255,77,77,.6);}
+.ix .ix-hud b{color:#fff;font-weight:900;}
 .ix-kicker{margin:0;font-family:var(--g-mono);font-weight:700;font-size:clamp(14px,2.6cqi,22px);letter-spacing:.06em;color:var(--g-cyan);text-shadow:0 0 12px rgba(59,164,255,.6);}
 .ix-title{margin:10px 0 0;width:100%;display:flex;justify-content:center;}
 .ix-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;}
-.ix-title-art{width:min(100%,760px);display:flex;justify-content:center;align-items:flex-end;min-height:clamp(110px,26cqi,230px);transform:perspective(720px) rotateX(16deg);transform-origin:50% 100%;filter:drop-shadow(0 0 18px rgba(255,200,40,.3)) drop-shadow(0 10px 14px rgba(0,0,0,.45));}
+.ix-title-art{position:relative;width:min(100%,780px);display:flex;justify-content:center;align-items:flex-end;min-height:clamp(110px,26cqi,230px);filter:drop-shadow(0 0 22px rgba(255,140,0,.35));}
+.ix-title-art canvas{image-rendering:pixelated;}
 .ix-title-art canvas{display:block;max-width:100%;height:auto;}
 .ix-slogan{margin:18px 0 0;font-weight:900;font-size:clamp(22px,4.4cqi,36px);color:#fff;text-shadow:0 2px 0 #000;}
 .ix-take{margin:0;max-width:44rem;font-weight:700;font-size:clamp(14px,2.2cqi,19px);line-height:1.6;color:#fff;text-shadow:0 1px 0 #000;}
@@ -137,13 +142,15 @@ body{min-height:100vh;}
 @media (prefers-reduced-motion:no-preference){
 .ix-spark{animation:ix-twinkle 2.4s ease-in-out infinite;}
 .ix-spark.s2{animation-delay:.6s;}.ix-spark.s3{animation-delay:1.2s;}.ix-spark.s4{animation-delay:1.8s;}
-.ix-title{animation:ix-float 4s ease-in-out infinite;}
+.ix-title-art{animation:ix-flicker 5s steps(1) infinite;}
 .ix-coin,.ix-rwait{animation:ix-blink 1.1s steps(1) infinite;}
 .ix-pod.m1 .ix-crown-box{animation:ix-bob 1.6s steps(2) infinite;}
 .ix-anim .ix-rfill{animation:ix-grow .7s steps(8) both;}
 .ix-anim .ix-mbar{animation:ix-rise .7s steps(8) both;transform-box:fill-box;transform-origin:bottom;}
 @keyframes ix-twinkle{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.35;transform:scale(.6);}}
 @keyframes ix-float{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+@keyframes ix-flicker{0%,100%{opacity:1;}91%{opacity:1;}92%{opacity:.82;}93%{opacity:1;}96%{opacity:.9;}97%{opacity:1;}}
+.ix-hud-blink{animation:ix-blink 1s steps(1) infinite;}
 @keyframes ix-blink{0%{opacity:1;}50%{opacity:.25;}}
 @keyframes ix-bob{0%{transform:translateY(0);}50%{transform:translateY(-3px);}}
 @keyframes ix-grow{from{transform:scaleX(0);}to{transform:scaleX(1);}}
@@ -160,7 +167,7 @@ body{min-height:100vh;}
 .ix-logo:empty{display:none;}
 .ix-logo img{display:block;height:clamp(26px,5cqi,40px);width:auto;}
 @container (max-width:640px){.ix-head{padding-top:42px;}}
-.ix-mascot{position:absolute;right:max(0px,calc(50% - 470px));top:96px;width:clamp(84px,19cqi,175px);pointer-events:none;filter:drop-shadow(0 0 12px rgba(255,255,255,.35)) drop-shadow(0 10px 10px rgba(0,0,0,.5));}
+.ix-mascot{position:absolute;right:max(0px,calc(50% - 580px));top:96px;width:clamp(84px,19cqi,175px);pointer-events:none;filter:drop-shadow(0 0 12px rgba(255,255,255,.35)) drop-shadow(0 10px 10px rgba(0,0,0,.5));}
 .ix-mascot img{display:block;width:100%;height:auto;}
 @container (max-width:640px){.ix-mascot{top:0;right:0;width:72px;}}
 .ix-podium{min-height:17rem;}
@@ -223,6 +230,11 @@ export default league;</pre>
   <header class="ix-head" id="top">
     <div class="ix-logo" data-draw="brand-logo" data-source="brand" data-fetchpriority="high"></div>
     <div class="ix-mascot" data-draw="brand-mascot" data-source="brand" aria-hidden="true"></div>
+    <div class="ix-hud" aria-hidden="true">
+      <span class="ix-hud-i"><span class="ix-hud-k ix-hud-blink">1UP</span><b data-draw="hud" data-source="kpi" data-field="total" data-row="0">—</b></span>
+      <span class="ix-hud-i"><span class="ix-hud-k">HI-SCORE</span><b data-draw="hud" data-source="kpi" data-field="top_score" data-row="0">—</b></span>
+      <span class="ix-hud-i"><span class="ix-hud-k">CREDIT</span><b data-draw="hud" data-source="kpi" data-field="innovators" data-row="0">—</b></span>
+    </div>
     <p class="ix-kicker">Innovator League · 2기</p>
     <h1 class="ix-title"><span class="ix-sr" data-line="main">천하제일</span> <span class="ix-sr" data-line="sub">연수왕</span><div class="ix-title-art" data-draw="title-art" data-source="fonts" data-fetchpriority="high" aria-hidden="true">—</div></h1>
     <p class="ix-slogan">우리 지역의 내일이 달렸다!</p>
@@ -424,6 +436,7 @@ dash.calc('kpi', {
     return [{
       total: trainings.length,
       points: trainings.filter((t) => String(t.point || '').trim()).length,
+      top_score: Math.max(0, ...trainings.reduce((m, t) => m.set(t.innovator, (m.get(t.innovator) || 0) + 1), new Map()).values()),
       innovators: new Set(trainings.map((t) => t.innovator)).size,
       regions_active: active.length,
       regions_total: by_region.length,
@@ -585,6 +598,12 @@ dash.draw('kpi', (el) => {
     return;
   }
   el.textContent = typeof v === 'number' ? d3.format(',')(v) : (v || '—');
+});
+
+dash.draw('hud', (el) => {
+  const d = dash.data('kpi');
+  const v = d.status === 'ok' && d.data.length ? d.data[0][el.dataset.field] : null;
+  el.textContent = v == null ? '—' : String(v).padStart(6, '0');
 });
 
 dash.draw('podium', (el) => {
@@ -826,44 +845,55 @@ dash.draw('title-art', (el) => {
     while (bot > top && !on[bot].some(Boolean)) bot--;
     return { align: ln.align, cells: on.slice(top, bot + 1), cols: c.width };
   });
-  const gapRows = 3, depth = 4;
-  const cols = Math.max(...grids.map((g) => g.cols)) + 2;
-  const rows = grids.reduce((s, g) => s + g.cells.length, 0) + gapRows * (grids.length - 1) + 2;
-  const avail = Math.min(el.clientWidth || 600, 760);
-  const cell = Math.max(3, Math.min(9, Math.floor(avail / (cols + depth))));
+  const gapRows = 2, depth = 2;
+  const cols = Math.max(...grids.map((g) => g.cols)) + 4;
+  const rows = grids.reduce((s, g) => s + g.cells.length, 0) + gapRows * (grids.length - 1) + 4;
+  const avail = Math.min(el.clientWidth || 600, 780);
+  const cell = Math.max(3, Math.min(11, Math.floor(avail / (cols + depth))));
   const dpr = window.devicePixelRatio || 1;
-  const W = Math.ceil((cols + depth) * cell), H = Math.ceil((rows + depth) * cell);
+  const W = (cols + depth) * cell, H = (rows + depth) * cell;
   const cv = document.createElement('canvas');
   cv.width = Math.round(W * dpr);
   cv.height = Math.round(H * dpr);
   cv.style.width = W + 'px';
   const ctx = cv.getContext('2d');
   ctx.scale(dpr, dpr);
+  ctx.imageSmoothingEnabled = false;
   const dots = [];
-  let y0 = 1;
+  const on = new Set();
+  let y0 = 2;
   grids.forEach((g) => {
-    const off = g.align === 'right' ? cols - 1 - g.cols : Math.floor((cols - g.cols) / 2);
-    g.cells.forEach((row, r) => row.forEach((v, q) => { if (v) dots.push([off + q, y0 + r]); }));
-    y0 += g.cells.length + gapRows;
+    const off = g.align === 'right' ? cols - 2 - g.cols : Math.floor((cols - g.cols) / 2);
+    const h = g.cells.length;
+    g.cells.forEach((row, r) => row.forEach((v, q) => {
+      if (!v) return;
+      const c = off + q, rr = y0 + r;
+      dots.push({ c, r: rr, t: h > 1 ? r / (h - 1) : 0 });
+      on.add(c + ',' + rr);
+    }));
+    y0 += h + gapRows;
   });
-  const baseX = depth * cell * 0.3;
-  const layer = (dx, dy, rad, color) => {
+  const sq = (c, r, dx, dy, grow) => ctx.rect(c * cell + dx - grow, r * cell + dy - grow, cell + grow * 2, cell + grow * 2);
+  const paint = (color, dx, dy, grow, filter) => {
     ctx.fillStyle = color;
     ctx.beginPath();
-    for (const [c, r] of dots) {
-      const cx = baseX + (c + 0.5) * cell + dx, cy = (r + 0.5) * cell + dy;
-      ctx.moveTo(cx + rad, cy);
-      ctx.arc(cx, cy, rad, 0, Math.PI * 2);
-    }
+    for (const d of dots) if (!filter || filter(d)) sq(d.c, d.r, dx, dy, grow);
     ctx.fill();
   };
-  const R = cell * 0.43;
-  for (let k = depth; k >= 1; k--) {
-    const color = k === depth ? '#8E0F07' : k === 1 ? '#FF6A13' : '#E0261B';
-    layer(-k * cell * 0.28, k * cell * 0.55, R, color);
-  }
-  layer(0, 0, R, '#FFE03A');
-  layer(-cell * 0.13, -cell * 0.13, cell * 0.15, '#FFF7C2');
+  const ol = Math.max(1, Math.round(cell * 0.45));
+  for (let k = depth; k >= 0; k--) paint('#1a0500', k * cell, k * cell, ol);
+  for (let k = depth; k >= 1; k--) paint(k === depth ? '#7a0d05' : '#C2200F', k * cell, k * cell, 0);
+  const bands = [[0.3, '#FFF35C'], [0.55, '#FFC21A'], [0.8, '#FF8A00'], [1.01, '#FF5200']];
+  let lo = -1;
+  bands.forEach(([hi, color]) => { const a = lo; paint(color, 0, 0, 0, (d) => d.t > a && d.t <= hi); lo = hi; });
+  ctx.fillStyle = '#FFFDE0';
+  ctx.beginPath();
+  for (const d of dots) if (!on.has(d.c + ',' + (d.r - 1))) ctx.rect(d.c * cell, d.r * cell, cell, Math.max(1, Math.round(cell * 0.35)));
+  ctx.fill();
+  ctx.globalCompositeOperation = 'source-atop';
+  ctx.fillStyle = 'rgba(0,0,0,.22)';
+  for (let y = 0; y < H; y += Math.max(2, Math.round(cell / 2))) ctx.fillRect(0, y, W, 1);
+  ctx.globalCompositeOperation = 'source-over';
   el.replaceChildren(cv);
 });
 
