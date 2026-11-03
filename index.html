@@ -164,13 +164,16 @@ body{min-height:100vh;}
 .ix-table tr.ix-soon td{opacity:.42;}
 .ix-table tr.ix-soon td.ix-date::before{content:'예정 ';color:var(--g-yellow);font-weight:700;}
 .ix-head{position:relative;}
-.ix-logo{position:absolute;left:0;top:0;z-index:2;display:block;}
+.ix-logo{display:block;}
 .ix-logo:empty{display:none;}
-.ix-logo img{display:block;height:clamp(26px,5cqi,40px);width:auto;}
+.ix-logo img{display:block;height:28px;width:auto;}
+.ix-foot-row{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:6px;}
+.ix-foot-row .ix-contact{margin:0;}
 @container (max-width:640px){.ix-head{padding-top:42px;}}
-.ix-mascot{position:absolute;right:max(0px,calc(50% - 580px));top:96px;width:clamp(84px,19cqi,175px);pointer-events:none;filter:drop-shadow(0 0 12px rgba(255,255,255,.35)) drop-shadow(0 10px 10px rgba(0,0,0,.5));}
+.ix-mascot{position:absolute;z-index:2;right:max(0px,calc(50% - 580px));top:96px;width:calc(clamp(84px,19cqi,175px) * var(--s,1));pointer-events:none;filter:drop-shadow(0 0 12px rgba(255,255,255,.35)) drop-shadow(0 10px 10px rgba(0,0,0,.5));}
 .ix-mascot img{display:block;width:100%;height:auto;}
-@container (max-width:640px){.ix-mascot{top:0;right:0;width:72px;}}
+@container (max-width:640px){.ix-mascot{top:0;right:0;width:calc(72px * var(--s,1));}}
+.ix-flip .ix-m-wrap{transform:scaleX(-1);}
 .ix-podium{min-height:17rem;}
 .ix-pod-av,.ix-pt-av,.ix-av-sm{image-rendering:pixelated;flex:none;}
 .ix-pod-av{width:70px;height:80px;margin:-4px 0 2px;filter:drop-shadow(1px 0 0 rgba(255,255,255,.85)) drop-shadow(-1px 0 0 rgba(255,255,255,.85)) drop-shadow(0 1px 0 rgba(255,255,255,.85)) drop-shadow(0 -1px 0 rgba(255,255,255,.85));}
@@ -186,7 +189,7 @@ body{min-height:100vh;}
 .ix-pt-empty{grid-column:1/-1;margin:0;padding:18px;text-align:center;font-family:var(--ix-body);font-size:14px;color:var(--g-muted);border:2px dashed rgba(59,164,255,.3);}
 .ix-card-note b{color:var(--g-orange);font-family:var(--ix-head);}
 .ix-contact{margin:6px 0 0;padding:6px 14px;font-family:var(--ix-body);font-size:13px;font-weight:700;color:#fff;background:rgba(3,8,23,.35);border:1px solid rgba(255,255,255,.25);border-radius:999px;}
-@media (prefers-reduced-motion:no-preference){.ix-mascot{animation:ix-bob2 2.4s ease-in-out infinite;}@keyframes ix-bob2{0%,100%{transform:translateY(0) rotate(0);}50%{transform:translateY(-6px) rotate(-2deg);}}}
+@media (prefers-reduced-motion:no-preference){.ix-mascot img{animation:ix-bob2 2.4s ease-in-out infinite;}.ix-m-out{animation:ix-m-out .55s ease-in both;}.ix-m-in{animation:ix-m-in .6s cubic-bezier(.2,1.6,.4,1) both;}@keyframes ix-m-out{to{transform:scale(0) rotate(-14deg);opacity:0;}}@keyframes ix-m-in{from{transform:scale(0) rotate(14deg);opacity:0;}to{transform:scale(1) rotate(0);opacity:1;}}@keyframes ix-bob2{0%,100%{transform:translateY(0) rotate(0);}50%{transform:translateY(-6px) rotate(-2deg);}}}
 </style>
 
 <div class="ix">
@@ -229,7 +232,6 @@ export default league;</pre>
   <span class="ix-spark s4" aria-hidden="true"></span>
 
   <header class="ix-head" id="top">
-    <div class="ix-logo" data-draw="brand-logo" data-source="brand" data-fetchpriority="high"></div>
     <div class="ix-mascot" data-draw="brand-mascot" data-source="brand" aria-hidden="true"></div>
     <div class="ix-hud" aria-hidden="true">
       <span class="ix-hud-i"><span class="ix-hud-k ix-hud-blink">1UP</span><b data-draw="hud" data-source="kpi" data-field="total" data-row="0">—</b></span>
@@ -345,7 +347,10 @@ export default league;</pre>
   <div class="ix-foot">
     <p class="ix-coin">INSERT COIN ▶</p>
     <p class="ix-foot-ko">연수를 열 때마다 내 순위와 우리 지역 게이지가 올라가요. 연수 후 단톡에 꼭 공유해주세요!</p>
-    <p class="ix-contact">💌 문의 마이클팀 양수정 팀장(010-2460-1264)</p>
+    <div class="ix-foot-row">
+      <div class="ix-logo" data-draw="brand-logo" data-source="brand"></div>
+      <p class="ix-contact">💌 문의 마이클팀 양수정 팀장(010-2460-1264)</p>
+    </div>
   </div>
 </div>
 
@@ -551,14 +556,56 @@ dash.draw('brand-logo', (el) => {
   el.append(img);
 });
 
-dash.draw('brand-mascot', (el) => {
-  const b = window.ixBrand('mascot');
-  el.replaceChildren();
-  if (!b) return;
-  const img = new Image();
-  img.src = b.src; img.alt = ''; img.width = b.w; img.height = b.h;
-  el.append(img);
+dash.draw('brand-mascot', {
+  mount(el) {
+    const st = { timer: null, started: false, built: false };
+    let last = -1;
+    st.place = () => {
+      const narrow = (el.parentElement ? el.parentElement.clientWidth : 1000) < 640;
+      const spots = narrow
+        ? [{ side: 'right', top: 0 }, { side: 'left', top: 0 }, { side: 'right', top: 150 }, { side: 'left', top: 150 }]
+        : [{ side: 'right', top: 96 }, { side: 'left', top: 110 }, { side: 'right', top: 30 }, { side: 'left', top: 40 }, { side: 'right', top: 170 }, { side: 'left', top: 190 }];
+      let i;
+      do { i = Math.floor(Math.random() * spots.length); } while (i === last && spots.length > 1);
+      last = i;
+      const sp = spots[i];
+      const s = narrow ? 0.8 + Math.random() * 0.35 : 0.65 + Math.random() * 0.6;
+      el.style.setProperty('--s', s.toFixed(2));
+      el.style.top = sp.top + 'px';
+      if (sp.side === 'left') { el.style.left = 'max(0px, calc(50% - 600px))'; el.style.right = 'auto'; el.classList.add('ix-flip'); }
+      else { el.style.right = 'max(0px, calc(50% - 600px))'; el.style.left = 'auto'; el.classList.remove('ix-flip'); }
+    };
+    st.cycle = () => {
+      el.classList.remove('ix-m-in');
+      el.classList.add('ix-m-out');
+      st.timer = setTimeout(() => {
+        st.place();
+        el.classList.remove('ix-m-out');
+        void el.offsetWidth;
+        el.classList.add('ix-m-in');
+        st.timer = setTimeout(st.cycle, 5200);
+      }, 700);
+    };
+    return st;
+  },
+  update(el, st) {
+    const b = window.ixBrand('mascot');
+    if (!b) { el.replaceChildren(); st.built = false; return; }
+    if (!st.built) {
+      const wrap = document.createElement('div');
+      wrap.className = 'ix-m-wrap';
+      const img = new Image();
+      img.src = b.src; img.alt = ''; img.width = b.w; img.height = b.h;
+      wrap.append(img);
+      el.replaceChildren(wrap);
+      st.built = true;
+    }
+    const still = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!st.started && !still) { st.started = true; st.timer = setTimeout(st.cycle, 5200); }
+  },
+  unmount(el, st) { clearTimeout(st.timer); }
 });
+
 
 dash.draw('points-feed', (el) => {
   const d = dash.data('trainings');

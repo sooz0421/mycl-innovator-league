@@ -5,6 +5,7 @@
   const calcs = {};
   const cache = {};
   const draws = {};
+  const mounted = new WeakMap();
 
   const rowsOf = (id) => {
     if (calcs[id]) return computeCalc(id);
@@ -26,7 +27,11 @@
     const fn = draws[name];
     if (!fn) return;
     document.querySelectorAll('[data-draw="' + name + '"]').forEach((el) => {
-      try { fn(el); } catch (e) { console.error('draw ' + name, e); }
+      try {
+        if (typeof fn === 'function') { fn(el); return; }
+        if (!mounted.has(el)) mounted.set(el, fn.mount ? fn.mount(el) : undefined);
+        if (fn.update) fn.update(el, mounted.get(el));
+      } catch (e) { console.error('draw ' + name, e); }
     });
   }
   const runAll = () => Object.keys(draws).forEach(runDraw);
