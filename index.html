@@ -486,7 +486,8 @@ window.ixAvatar = (name, px) => {
   const shirt = pick(['#ffffff', '#2f6fdf', '#e5483b', '#2fae6b', '#f5a623', '#7b4fd6', '#1f2a44', '#ff7eb6'], 2);
   const pants = pick(['#1f5fbf', '#2a2f3a', '#3a7d44', '#6a3f1f', '#24345e'], 3);
   const band = pick(['#1f6fd1', '#e5483b', '#f5a623', '#2fae6b', '#7b4fd6'], 4);
-  const style = pick(['band', 'plain', 'buns', 'long', 'band', 'cap'], 5);
+  const STYLE_FIX = { '황도연': 'band' };
+  const style = STYLE_FIX[String(name).trim()] || pick(['band', 'plain', 'buns', 'long', 'band', 'cap'], 5);
   const T = [
     '....KKKKKK....',
     '...KHHHHHHK...',
