@@ -1,1 +1,7 @@
-# mycl-innovator-league
+# 천하제일 연수왕 · 마이클 이노베이터 리그
+
+마이클 이노베이터 2기 전국 연수 현황판입니다.
+
+- `data/trainings.csv` — 연수 기록 (매일 아침 비공개 입력 페이지에서 자동 반영)
+- `data/korea_map.json` — 시·도교육청 16개 권역 지도 (통계청 2013 경계, southkorea-maps)
+- 글꼴: 넥슨Lv1고딕 Bold(넥슨 폰트 사용정책), 나눔바른고딕(OFL) — 상용 한글 2,350자 서브셋

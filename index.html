@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>천하제일 연수왕 | 마이클 이노베이터 리그</title>
+<meta name="description" content="마이클 이노베이터 2기 전국 연수 현황판 — 지역별 연수, 이노베이터 랭킹, 주요 연수 포인트">
+<meta property="og:title" content="천하제일 연수왕 | 마이클 이노베이터 리그">
+<meta property="og:description" content="우리 지역의 내일이 달렸다! 마이클 이노베이터 전국 연수 현황판">
+<meta property="og:image" content="assets/mascot.webp">
+<link rel="icon" href="assets/logo.png">
+<style>
+@font-face{font-family:'IX Nexon';src:url('fonts/nexon-bold.woff2') format('woff2');font-weight:700;font-display:swap;}
+@font-face{font-family:'IX Barun';src:url('fonts/barun-400.woff2') format('woff2');font-weight:400;font-display:swap;}
+@font-face{font-family:'IX Barun';src:url('fonts/barun-700.woff2') format('woff2');font-weight:700;font-display:swap;}
+html,body{margin:0;padding:0;background:linear-gradient(180deg,#03050c 0%,#081634 28%,#0f3a80 62%,#1b5fbf 100%) fixed #081634;}
+body{min-height:100vh;}
+#dash-root{--cds-dur-slow:.4s;max-width:1240px;margin:0 auto;}
+#dash-root .ix{min-height:100vh;box-sizing:border-box;}
+.dash-skeleton{position:relative;}
+</style>
+<script src="vendor/d3.min.js"></script>
+<script src="dash-shim.js"></script>
+</head>
+<body>
+<div id="dash-root">
+<style>
+#dash-root{--dash-gutter:0;}
+#dash-root .ix{--g-orange:#F5A623;--g-orange-d:#B8650A;--g-orange-dd:#7A3F03;--g-cyan:#3BA4FF;--g-yellow:#FFD15C;--g-white:#F4F7FF;--g-muted:#9FB3D9;--g-panel:rgba(5,12,32,.78);--g-line:#2a5bbd;--g-gold:#FFC94D;--g-silver:#CFD8E6;--g-bronze:#E08A4B;--g-green:#5BE37D;--g-red:#FF6B6B;--g-mono:ui-monospace,'SFMono-Regular','Menlo','Consolas','Courier New',monospace;
+  position:relative;overflow:hidden;container-type:inline-size;font-family:var(--font-anthropic-sans);color:var(--g-white);
+  background:radial-gradient(1.5px 1.5px at 12% 18%,#fff8 50%,transparent 51%),radial-gradient(1.5px 1.5px at 78% 9%,#fff6 50%,transparent 51%),radial-gradient(1.5px 1.5px at 64% 27%,#fff5 50%,transparent 51%),radial-gradient(1.5px 1.5px at 30% 6%,#fff6 50%,transparent 51%),radial-gradient(1.5px 1.5px at 90% 33%,#fff4 50%,transparent 51%),linear-gradient(180deg,#03050c 0%,#081634 28%,#0f3a80 62%,#1b5fbf 100%);
+  padding:clamp(20px,5cqi,48px) clamp(14px,4cqi,40px) clamp(28px,5cqi,48px);display:flex;flex-direction:column;gap:clamp(18px,3cqi,28px);}
+.ix-code{position:absolute;top:0;margin:0;font-family:var(--g-mono);font-size:12px;line-height:1.55;color:#8fb8ff;opacity:.13;pointer-events:none;white-space:pre;z-index:0;}
+.ix-code-l{left:6px;}
+.ix-code-r{right:6px;top:120px;text-align:left;}
+@container (max-width:760px){.ix-code-r{display:none;}.ix-code-l{opacity:.08;}}
+.ix > *:not(.ix-code):not(.ix-spark){position:relative;z-index:1;}
+.ix-spark{position:absolute;z-index:0;width:22px;height:22px;background:#fff;clip-path:polygon(50% 0,58% 42%,100% 50%,58% 58%,50% 100%,42% 58%,0 50%,42% 42%);filter:drop-shadow(0 0 6px #fff);pointer-events:none;}
+.ix-spark.s1{top:34px;left:22%;}
+.ix-spark.s2{top:120px;left:14%;width:14px;height:14px;}
+.ix-spark.s3{top:96px;right:16%;width:26px;height:26px;}
+.ix-spark.s4{top:300px;right:8%;width:12px;height:12px;}
+.ix-head{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;}
+.ix-kicker{margin:0;font-family:var(--g-mono);font-weight:700;font-size:clamp(14px,2.6cqi,22px);letter-spacing:.06em;color:var(--g-cyan);text-shadow:0 0 12px rgba(59,164,255,.6);}
+.ix-title{margin:10px 0 0;width:100%;display:flex;justify-content:center;}
+.ix-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;}
+.ix-title-art{width:min(100%,760px);display:flex;justify-content:center;align-items:flex-end;min-height:clamp(110px,26cqi,230px);transform:perspective(720px) rotateX(16deg);transform-origin:50% 100%;filter:drop-shadow(0 0 18px rgba(255,200,40,.3)) drop-shadow(0 10px 14px rgba(0,0,0,.45));}
+.ix-title-art canvas{display:block;max-width:100%;height:auto;}
+.ix-slogan{margin:18px 0 0;font-weight:900;font-size:clamp(22px,4.4cqi,36px);color:#fff;text-shadow:0 2px 0 #000;}
+.ix-take{margin:0;max-width:44rem;font-weight:700;font-size:clamp(14px,2.2cqi,19px);line-height:1.6;color:#fff;text-shadow:0 1px 0 #000;}
+.ix .ix-take b{color:var(--g-yellow);font-weight:900;}
+.ix-tag{margin:4px 0 0;font-weight:800;font-size:clamp(13px,2cqi,17px);color:var(--g-orange);}
+.ix .ix-tag b{font-weight:900;}
+.ix-sample{margin:2px 0 0;font-size:12px;color:var(--g-muted);}
+.ix-panel{background:var(--g-panel);border:2px solid var(--g-line);box-shadow:inset 0 0 0 2px rgba(59,164,255,.12),0 6px 0 rgba(0,0,0,.35);clip-path:polygon(0 8px,8px 8px,8px 0,calc(100% - 8px) 0,calc(100% - 8px) 8px,100% 8px,100% calc(100% - 8px),calc(100% - 8px) calc(100% - 8px),calc(100% - 8px) 100%,8px 100%,8px calc(100% - 8px),0 calc(100% - 8px));}
+.ix-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,10.5rem),1fr));gap:12px;}
+.ix-stat{padding:14px 16px;display:flex;flex-direction:column;gap:4px;min-width:0;}
+.ix-stat-en{margin:0;font-family:var(--g-mono);font-weight:700;font-size:11px;letter-spacing:.08em;color:var(--g-cyan);}
+.ix-stat-ko{margin:0;font-size:13px;font-weight:700;color:var(--g-muted);}
+.ix-stat-val{margin:2px 0 0;font-weight:900;font-size:clamp(30px,5cqi,42px);line-height:1.05;color:var(--g-orange);text-shadow:0 3px 0 var(--g-orange-dd);font-variant-numeric:tabular-nums;}
+.ix .ix-stat-val b{font-weight:900;}
+.ix-u{font-size:.45em;margin-left:.15em;color:var(--g-white);text-shadow:none;}
+.ix-stat-note{margin:0;font-size:12px;color:var(--g-muted);}
+.ix .ix-stat-note b{color:var(--g-white);font-weight:800;}
+.ix-up{color:var(--g-green) !important;}
+.ix-up::before{content:'▲ ';font-size:.8em;}
+.ix-down{color:var(--g-red) !important;}
+.ix-down::before{content:'▼ ';font-size:.8em;}
+.ix-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,23rem),1fr));gap:16px;}
+.ix-card{padding:18px;display:flex;flex-direction:column;gap:14px;min-width:0;}
+.ix-card-en{margin:0;font-family:var(--g-mono);font-weight:700;font-size:12px;letter-spacing:.12em;color:var(--g-cyan);}
+.ix-card h2{margin:2px 0 0;font-size:20px;font-weight:900;color:#fff;}
+.ix-card-note{margin:4px 0 0;font-size:12px;color:var(--g-muted);}
+.ix-podium{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;align-items:end;min-height:13rem;}
+.ix-pod{display:flex;flex-direction:column;align-items:center;gap:3px;min-width:0;text-align:center;}
+.ix-pod.p1{order:2;}.ix-pod.p2{order:1;}.ix-pod.p3{order:3;}
+.ix-crown-box{width:36px;height:20px;margin-bottom:4px;}
+.ix-crown{width:4px;height:4px;background:currentColor;box-shadow:0px 0px,16px 0px,32px 0px,0px 4px,4px 4px,12px 4px,16px 4px,20px 4px,28px 4px,32px 4px,0px 8px,4px 8px,8px 8px,12px 8px,16px 8px,20px 8px,24px 8px,28px 8px,32px 8px,0px 12px,8px 12px,12px 12px,20px 12px,24px 12px,32px 12px,0px 16px,4px 16px,8px 16px,12px 16px,16px 16px,20px 16px,24px 16px,28px 16px,32px 16px;}
+.ix-pod.m1{--m:var(--g-gold);}.ix-pod.m2{--m:var(--g-silver);}.ix-pod.m3{--m:var(--g-bronze);}
+.ix-crown-box{color:var(--m);}
+.ix-pod.m1 .ix-crown-box{filter:drop-shadow(0 0 8px rgba(255,201,77,.7));}
+.ix-pod-name{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:900;font-size:15px;color:#fff;}
+.ix-pod-region{font-family:var(--g-mono);font-size:12px;color:var(--g-cyan);}
+.ix-pod-score{font-weight:900;font-size:24px;color:var(--g-orange);text-shadow:0 2px 0 var(--g-orange-dd);font-variant-numeric:tabular-nums;}
+.ix-pod-score small{font-size:.55em;color:#fff;text-shadow:none;margin-left:2px;}
+.ix-pedestal{width:100%;display:flex;align-items:flex-start;justify-content:center;padding-top:6px;font-family:var(--g-mono);font-weight:900;font-size:26px;color:#06102a;background:var(--m);box-shadow:inset 0 -6px 0 rgba(0,0,0,.25),inset 0 6px 0 rgba(255,255,255,.3);}
+.ix-pod.p1 .ix-pedestal{height:70px;}.ix-pod.p2 .ix-pedestal{height:48px;}.ix-pod.p3 .ix-pedestal{height:34px;}
+.ix-search{width:100%;box-sizing:border-box;padding:9px 12px;border:2px solid var(--g-line);background:#030817;color:#fff;font:inherit;font-size:14px;outline:none;}
+.ix-search::placeholder{color:#6f86b5;}
+.ix-search:focus{border-color:var(--g-orange);}
+.ix-scroll{max-height:26rem;overflow:auto;}
+.ix-table{width:100%;border-collapse:collapse;font-size:14px;font-variant-numeric:tabular-nums;}
+.ix-table th{position:sticky;top:0;z-index:1;background:#071433;text-align:left;font-family:var(--g-mono);font-weight:700;font-size:11px;letter-spacing:.08em;color:var(--g-cyan);padding:8px 10px;border-bottom:2px solid var(--g-line);white-space:nowrap;}
+.ix-table td{padding:8px 10px;border-bottom:1px dashed rgba(59,164,255,.22);white-space:nowrap;color:#fff;}
+.ix-table tbody tr:hover td{background:rgba(59,164,255,.08);}
+.ix-table tr.ix-hit td{background:rgba(245,166,35,.14);}
+.ix-rank{font-family:var(--g-mono);font-weight:900;color:var(--g-muted);}
+.ix-rank::after{content:'위';font-family:var(--font-anthropic-sans);font-size:.8em;margin-left:1px;}
+.ix-rank.r1{color:var(--g-gold);}.ix-rank.r2{color:var(--g-silver);}.ix-rank.r3{color:var(--g-bronze);}
+.ix-teacher::after{content:' 선생님';color:var(--g-muted);font-size:.82em;font-weight:400;}
+.ix-name{font-weight:800;}
+.ix-region{font-family:var(--g-mono);color:var(--g-cyan);}
+.ix-countcell{display:flex;align-items:center;gap:8px;min-width:7.5rem;font-family:var(--g-mono);font-weight:900;color:var(--g-orange);}
+.ix-exp{height:10px;flex:none;background:repeating-linear-gradient(90deg,var(--g-orange) 0 6px,transparent 6px 8px);}
+.ix-dim{color:var(--g-muted);font-family:var(--g-mono);font-size:12px;}
+.ix-empty{color:var(--g-muted) !important;text-align:center;}
+.ix-rbars{display:flex;flex-direction:column;gap:7px;position:relative;min-height:31rem;}
+.ix-rrow{display:grid;grid-template-columns:2.6rem minmax(0,1fr);align-items:center;gap:10px;font-size:14px;font-weight:800;cursor:default;}
+.ix-rtrack{display:flex;align-items:center;gap:8px;min-width:0;height:18px;}
+.ix-rfill{height:100%;flex:none;transform-origin:left center;background:repeating-linear-gradient(90deg,var(--c) 0 8px,transparent 8px 10px);box-shadow:0 0 10px color-mix(in srgb,var(--c) 45%,transparent);}
+.ix-rval{font-family:var(--g-mono);font-size:12px;color:var(--g-muted);white-space:nowrap;}
+.ix .ix-rval b{color:var(--g-orange);font-weight:900;font-size:13px;}
+.ix-rwait{font-family:var(--g-mono);font-size:11px;font-weight:700;color:var(--g-yellow);border:1px dashed var(--g-yellow);padding:1px 8px;white-space:nowrap;}
+.ix-chart{position:relative;min-height:250px;}
+.ix-map{position:relative;min-height:22rem;background:rgba(255,255,255,.8);border-radius:6px;padding:10px;box-shadow:inset 0 0 0 2px rgba(255,255,255,.35);}
+.ix-map svg{display:block;max-height:46rem;margin:0 auto;}
+.ix-reg{stroke:#fff;stroke-width:1.2;cursor:pointer;transition:filter .15s;}
+.ix-reg:hover{filter:brightness(.94);}
+.ix-reg-zero{stroke:#C9D2E0;stroke-width:.8;}
+.ix-map-name{font-size:10px;font-weight:700;fill:#33415c;stroke:#fff;stroke-width:3px;paint-order:stroke;}
+.ix-map-num{font-family:var(--g-mono);font-size:17px;font-weight:900;fill:#1b2236;stroke:#fff;stroke-width:3.5px;paint-order:stroke;}
+.ix-map-num.zero{fill:#9AA6BA;font-size:14px;}
+.ix-map-lead{stroke:#7a869e;stroke-width:1;}
+.ix-map-dot{fill:#1b2236;}
+.ix-map-note{font-size:10px;font-weight:700;fill:#5b6680;}
+@media (prefers-reduced-motion:no-preference){.ix-anim .ix-reg{animation:ix-pop .6s steps(6) both;}@keyframes ix-pop{from{opacity:0;}to{opacity:1;}}}
+.ix-tip{position:absolute;pointer-events:none;background:#06102a;border:2px solid var(--g-cyan);color:#fff;padding:6px 10px;font-size:12px;font-weight:700;white-space:nowrap;z-index:3;box-shadow:0 4px 0 rgba(0,0,0,.4);}
+.ix-tip-k{font-family:var(--g-mono);color:var(--g-cyan);}
+.ix-fail{display:flex;align-items:center;justify-content:center;gap:6px;min-height:inherit;height:100%;color:var(--g-muted);font-size:12px;}
+.ix-fail-dot{width:.375rem;height:.375rem;border-radius:50%;background:var(--g-red);}
+.ix-date{font-family:var(--g-mono);color:var(--g-cyan);}
+[data-dash-source-state=refreshing]{opacity:.5;transition:opacity var(--cds-dur-slow);}
+.ix-foot{margin:4px 0 0;text-align:center;display:flex;flex-direction:column;align-items:center;gap:6px;}
+.ix-coin{margin:0;font-family:var(--g-mono);font-weight:900;font-size:clamp(16px,3cqi,22px);letter-spacing:.14em;color:var(--g-yellow);text-shadow:0 0 12px rgba(255,209,92,.6);}
+.ix-foot-ko{margin:0;font-size:14px;font-weight:700;color:#fff;}
+@container (max-width:560px){.ix-narrow-hide{display:none;}}
+@media (prefers-reduced-motion:no-preference){
+.ix-spark{animation:ix-twinkle 2.4s ease-in-out infinite;}
+.ix-spark.s2{animation-delay:.6s;}.ix-spark.s3{animation-delay:1.2s;}.ix-spark.s4{animation-delay:1.8s;}
+.ix-title{animation:ix-float 4s ease-in-out infinite;}
+.ix-coin,.ix-rwait{animation:ix-blink 1.1s steps(1) infinite;}
+.ix-pod.m1 .ix-crown-box{animation:ix-bob 1.6s steps(2) infinite;}
+.ix-anim .ix-rfill{animation:ix-grow .7s steps(8) both;}
+.ix-anim .ix-mbar{animation:ix-rise .7s steps(8) both;transform-box:fill-box;transform-origin:bottom;}
+@keyframes ix-twinkle{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.35;transform:scale(.6);}}
+@keyframes ix-float{0%,100%{transform:translateY(0);}50%{transform:translateY(-6px);}}
+@keyframes ix-blink{0%{opacity:1;}50%{opacity:.25;}}
+@keyframes ix-bob{0%{transform:translateY(0);}50%{transform:translateY(-3px);}}
+@keyframes ix-grow{from{transform:scaleX(0);}to{transform:scaleX(1);}}
+@keyframes ix-rise{from{transform:scaleY(0);}to{transform:scaleY(1);}}
+}
+#dash-root .ix{--ix-head:'IX Nexon','NEXON Lv1 Gothic OTF','NEXON Lv1 Gothic','Apple SD Gothic Neo','Malgun Gothic',sans-serif;--ix-body:'IX Barun','NanumBarunGothic','Nanum Barun Gothic','Apple SD Gothic Neo','Malgun Gothic',sans-serif;font-family:var(--ix-body);}
+.ix-slogan,.ix-card h2,.ix-stat-val,.ix-tag,.ix-pod-name,.ix-pod-score,.ix-rank,.ix-countcell,.ix-map-num,.ix-pedestal{font-family:var(--ix-head);}
+.ix-rank::after,.ix-u,.ix-pod-score small,.ix-teacher::after{font-family:var(--ix-body);}
+.ix-take,.ix-card-note,.ix-stat-ko,.ix-stat-note,.ix-foot-ko,.ix-search,.ix-table td,.ix-tip,.ix-tip-k,.ix-date,.ix-region,.ix-dim,.ix-pod-region,.ix-map-name,.ix-map-note,.ix-empty{font-family:var(--ix-body);}
+.ix-table tr.ix-soon td{opacity:.42;}
+.ix-table tr.ix-soon td.ix-date::before{content:'예정 ';color:var(--g-yellow);font-weight:700;}
+.ix-head{position:relative;}
+.ix-logo{position:absolute;left:0;top:0;z-index:2;display:block;}
+.ix-logo:empty{display:none;}
+.ix-logo img{display:block;height:clamp(26px,5cqi,40px);width:auto;}
+@container (max-width:640px){.ix-head{padding-top:42px;}}
+.ix-mascot{position:absolute;right:max(0px,calc(50% - 470px));top:96px;width:clamp(84px,19cqi,175px);pointer-events:none;filter:drop-shadow(0 0 12px rgba(255,255,255,.35)) drop-shadow(0 10px 10px rgba(0,0,0,.5));}
+.ix-mascot img{display:block;width:100%;height:auto;}
+@container (max-width:640px){.ix-mascot{top:0;right:0;width:72px;}}
+.ix-podium{min-height:17rem;}
+.ix-pod-av,.ix-pt-av,.ix-av-sm{image-rendering:pixelated;flex:none;}
+.ix-pod-av{width:70px;height:80px;margin:-4px 0 2px;filter:drop-shadow(1px 0 0 rgba(255,255,255,.85)) drop-shadow(-1px 0 0 rgba(255,255,255,.85)) drop-shadow(0 1px 0 rgba(255,255,255,.85)) drop-shadow(0 -1px 0 rgba(255,255,255,.85));}
+.ix-av-sm{width:28px;height:32px;vertical-align:middle;margin-right:8px;}
+.ix-pts{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,19rem),1fr));gap:12px;min-height:5rem;}
+.ix-pt{display:flex;gap:12px;align-items:flex-start;background:rgba(255,255,255,.06);border:2px dashed rgba(59,164,255,.35);padding:12px;}
+.ix-pt-av{width:42px;height:48px;}
+.ix-pt-body{min-width:0;display:flex;flex-direction:column;gap:4px;}
+.ix-pt-meta,.ix-pt-title,.ix-pt-text{margin:0;font-family:var(--ix-body);}
+.ix-pt-meta{font-size:12px;color:var(--g-muted);}
+.ix-pt-title{font-size:13px;font-weight:700;color:var(--g-orange);}
+.ix-pt-text{font-size:14px;line-height:1.6;color:#fff;white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere;}
+.ix-pt-empty{grid-column:1/-1;margin:0;padding:18px;text-align:center;font-family:var(--ix-body);font-size:14px;color:var(--g-muted);border:2px dashed rgba(59,164,255,.3);}
+.ix-card-note b{color:var(--g-orange);font-family:var(--ix-head);}
+.ix-contact{margin:6px 0 0;padding:6px 14px;font-family:var(--ix-body);font-size:13px;font-weight:700;color:#fff;background:rgba(3,8,23,.35);border:1px solid rgba(255,255,255,.25);border-radius:999px;}
+@media (prefers-reduced-motion:no-preference){.ix-mascot{animation:ix-bob2 2.4s ease-in-out infinite;}@keyframes ix-bob2{0%,100%{transform:translateY(0) rotate(0);}50%{transform:translateY(-6px) rotate(-2deg);}}}
+</style>
+
+<div class="ix">
+  <pre class="ix-code ix-code-l" aria-hidden="true">class Innovator:
+    def __init__(self, name, region):
+        self.name = name
+        self.region = region
+        self.trainings = []
+
+    def run_training(self, school):
+        self.trainings.append(school)
+        return "LEVEL UP!"
+
+async def league_loop():
+    while True:
+        for t in innovators:
+            await t.run_training()
+        leaderboard.update()
+
+def stage_clear(region):
+    return "CLEAR"
+
+league = League("mycl")
+league.start()</pre>
+  <pre class="ix-code ix-code-r" aria-hidden="true">const league = new League("mycl");
+
+league.on("training", (t) => {
+  score[t.innovator]++;
+  stage[t.region].exp++;
+  rank.update();
+});
+
+if (!stage.active)
+  stage.wait("NEW CHALLENGER");
+
+export default league;</pre>
+  <span class="ix-spark s1" aria-hidden="true"></span>
+  <span class="ix-spark s2" aria-hidden="true"></span>
+  <span class="ix-spark s3" aria-hidden="true"></span>
+  <span class="ix-spark s4" aria-hidden="true"></span>
+
+  <header class="ix-head" id="top">
+    <div class="ix-logo" data-draw="brand-logo" data-source="brand" data-fetchpriority="high"></div>
+    <div class="ix-mascot" data-draw="brand-mascot" data-source="brand" aria-hidden="true"></div>
+    <p class="ix-kicker">Innovator League · 2기</p>
+    <h1 class="ix-title"><span class="ix-sr" data-line="main">천하제일</span> <span class="ix-sr" data-line="sub">연수왕</span><div class="ix-title-art" data-draw="title-art" data-source="fonts" data-fetchpriority="high" aria-hidden="true">—</div></h1>
+    <p class="ix-slogan">우리 지역의 내일이 달렸다!</p>
+    <p class="ix-take">지금까지 <b data-draw="kpi" data-source="kpi" data-field="innovators" data-row="0">—</b>명의 이노베이터가 <b data-draw="kpi" data-source="kpi" data-field="total" data-row="0">—</b>번의 연수를 열었어요. 선두 지역은 <b data-draw="kpi" data-source="kpi" data-field="top_region" data-row="0">—</b>, 아직 첫 연수를 기다리는 지역은 <b data-draw="kpi" data-source="kpi" data-field="regions_waiting" data-row="0">—</b>곳!</p>
+    <p class="ix-tag">마이클 이노베이터 | 전국 <b data-draw="kpi" data-source="kpi" data-field="regions_total" data-row="0">—</b>개 시·도교육청 연수 리그</p>
+  </header>
+
+  <section class="ix-stats" aria-label="누적 현황">
+    <div class="ix-stat ix-panel">
+      <p class="ix-stat-en">TOTAL TRAININGS</p>
+      <p class="ix-stat-ko">누적 연수</p>
+      <p class="ix-stat-val"><b data-draw="kpi" data-source="kpi" data-field="total" data-row="0">—</b><span class="ix-u">회</span></p>
+      <p class="ix-stat-note"><b data-draw="kpi" data-source="kpi" data-field="latest_date" data-row="0">—</b> 기준</p>
+    </div>
+    <div class="ix-stat ix-panel">
+      <p class="ix-stat-en">PLAYERS</p>
+      <p class="ix-stat-ko">연수를 연 이노베이터</p>
+      <p class="ix-stat-val"><b data-draw="kpi" data-source="kpi" data-field="innovators" data-row="0">—</b><span class="ix-u">명</span></p>
+      <p class="ix-stat-note">한 번 이상 연수를 진행한 인원</p>
+    </div>
+    <div class="ix-stat ix-panel">
+      <p class="ix-stat-en">STAGES OPEN</p>
+      <p class="ix-stat-ko">연수가 열린 시·도</p>
+      <p class="ix-stat-val"><b data-draw="kpi" data-source="kpi" data-field="regions_active" data-row="0">—</b><span class="ix-u">곳</span></p>
+      <p class="ix-stat-note">전국 <b data-draw="kpi" data-source="kpi" data-field="regions_total" data-row="0">—</b>개 시·도교육청 중</p>
+    </div>
+    <div class="ix-stat ix-panel">
+      <p class="ix-stat-en">THIS ROUND</p>
+      <p class="ix-stat-ko"><span data-draw="kpi" data-source="kpi" data-field="latest_month_label" data-row="0">—</span> 연수</p>
+      <p class="ix-stat-val"><b data-draw="kpi" data-source="kpi" data-field="latest_month_count" data-row="0">—</b><span class="ix-u">회</span></p>
+      <p class="ix-stat-note">전월 대비 <b data-draw="kpi" data-source="kpi" data-field="change_vs_prev" data-row="0">—</b>회</p>
+    </div>
+  </section>
+
+  <section class="ix-grid">
+    <div class="ix-card ix-panel" id="ranking">
+      <div>
+        <p class="ix-card-en">HIGH SCORE</p>
+        <h2>이노베이터 랭킹</h2>
+        <p class="ix-card-note">누적 연수 횟수 순 · 횟수가 같으면 같은 순위</p>
+      </div>
+      <div class="ix-podium" data-draw="podium" data-source="ranking"></div>
+      <input class="ix-search" type="search" placeholder="▶ 이름이나 지역으로 내 순위 찾기" aria-label="이노베이터 이름이나 지역으로 찾기">
+      <div class="ix-scroll">
+        <table class="ix-table" data-source="ranking" data-row-key="innovator">
+          <thead><tr>
+            <th data-field="rank">RANK</th>
+            <th data-field="innovator">PLAYER</th>
+            <th data-field="region">STAGE</th>
+            <th data-field="count">SCORE</th>
+            <th data-field="last_date" class="ix-narrow-hide">LAST</th>
+          </tr></thead>
+          <tbody data-draw="rank-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="ix-card ix-panel" id="regions">
+      <div>
+        <p class="ix-card-en">STAGE MAP</p>
+        <h2>지역별 연수 현황</h2>
+        <p class="ix-card-note">연수를 많이 할수록 지역 색이 진해져요 · 지역에 커서를 대면 연수한 선생님이 보여요</p>
+      </div>
+      <div class="ix-map" data-draw="region-map" data-source="by_region region_teachers korea_map"></div>
+    </div>
+  </section>
+
+  <section class="ix-grid">
+    <div class="ix-card ix-panel" id="months">
+      <div>
+        <p class="ix-card-en">MONTHLY COMBO</p>
+        <h2>월별 연수 횟수</h2>
+        <p class="ix-card-note">달마다 열린 연수 수 · 가장 최근 달은 주황색</p>
+      </div>
+      <div class="ix-chart" data-draw="months" data-source="by_month"></div>
+    </div>
+
+    <div class="ix-card ix-panel" id="recent">
+      <div>
+        <p class="ix-card-en">BATTLE LOG</p>
+        <h2>최근 · 예정 연수</h2>
+        <p class="ix-card-note">흐리게 보이는 줄은 앞으로 열릴 연수예요 · 최근 연수는 8건까지</p>
+      </div>
+      <div class="ix-scroll">
+        <table class="ix-table" data-source="trainings" data-row-key="id">
+          <thead><tr>
+            <th data-field="date">DATE</th>
+            <th data-field="region">STAGE</th>
+            <th data-field="innovator">PLAYER</th>
+            <th data-field="title" class="ix-narrow-hide">MISSION</th>
+          </tr></thead>
+          <tbody data-draw="recent-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section class="ix-card ix-panel" id="points">
+    <div>
+      <p class="ix-card-en">POWER-UP LOG</p>
+      <h2>주요 연수 포인트</h2>
+      <p class="ix-card-note">연수에서 나온 좋은 반응과 꿀팁을 차곡차곡 쌓아요 · 지금까지 <b data-draw="kpi" data-source="kpi" data-field="points" data-row="0">—</b>개</p>
+    </div>
+    <div class="ix-pts" data-draw="points-feed" data-source="trainings"></div>
+  </section>
+
+  <div class="ix-foot">
+    <p class="ix-coin">INSERT COIN ▶</p>
+    <p class="ix-foot-ko">연수를 열 때마다 내 순위와 우리 지역 게이지가 올라가요. 연수 후 단톡에 꼭 공유해주세요!</p>
+    <p class="ix-contact">💌 문의 마이클팀 양수정 팀장(010-2460-1264)</p>
+  </div>
+</div>
+
+<script>
+dash.calc('ranking', {
+  inputs: ['trainings'],
+  title: '이노베이터별 연수 횟수',
+  description: '이노베이터마다 연수 기록 수를 세어 많은 순으로 순위를 매겨요(같은 횟수는 같은 순위).',
+  fn: (trainings) => {
+    trainings = trainings.filter((t) => t.status !== '예정');
+    const m = new Map();
+    for (const t of trainings) {
+      const r = m.get(t.innovator) || { innovator: t.innovator, region: t.region, count: 0, last_date: '' };
+      r.count += 1;
+      if (t.date > r.last_date) { r.last_date = t.date; r.region = t.region; }
+      m.set(t.innovator, r);
+    }
+    const rows = [...m.values()].sort((a, b) => b.count - a.count || b.last_date.localeCompare(a.last_date) || a.innovator.localeCompare(b.innovator));
+    rows.forEach((r, i) => { r.rank = i > 0 && rows[i - 1].count === r.count ? rows[i - 1].rank : i + 1; });
+    return rows;
+  }
+});
+
+dash.calc('by_region', {
+  inputs: ['trainings'],
+  title: '시·도별 연수 횟수',
+  description: '시·도교육청 기준 16개 권역(광주·전남은 전남광주로 통합)마다 연수 기록 수와 연수를 연 이노베이터 수를 세요. 기록이 없는 지역은 0회예요.',
+  fn: (trainings) => {
+    trainings = trainings.filter((t) => t.status !== '예정');
+    const REGIONS = ['서울', '부산', '대구', '인천', '대전', '울산', '세종', '경기', '강원', '충북', '충남', '전북', '전남광주', '경북', '경남', '제주'];
+    const names = [...REGIONS];
+    for (const t of trainings) if (!names.includes(t.region)) names.push(t.region);
+    return names.map((region) => {
+      const ts = trainings.filter((t) => t.region === region);
+      return { region, count: ts.length, innovators: new Set(ts.map((t) => t.innovator)).size };
+    }).sort((a, b) => b.count - a.count || names.indexOf(a.region) - names.indexOf(b.region));
+  }
+});
+
+dash.calc('region_teachers', {
+  inputs: ['trainings'],
+  title: '지역별 이노베이터 연수 횟수',
+  description: '지역과 이노베이터를 묶어 연수 기록 수를 세요. 지도에 커서를 대면 보이는 명단이에요.',
+  fn: (trainings) => {
+    trainings = trainings.filter((t) => t.status !== '예정');
+    const m = new Map();
+    for (const t of trainings) {
+      const k = t.region + '|' + t.innovator;
+      const r = m.get(k) || { region: t.region, innovator: t.innovator, count: 0 };
+      r.count += 1;
+      m.set(k, r);
+    }
+    return [...m.values()].sort((a, b) => a.region.localeCompare(b.region) || b.count - a.count || a.innovator.localeCompare(b.innovator));
+  }
+});
+
+dash.calc('by_month', {
+  inputs: ['trainings'],
+  title: '월별 연수 횟수',
+  description: '연수 날짜의 연-월별로 기록 수를 세고, 기록이 없는 달은 0회로 채워요.',
+  fn: (trainings) => {
+    trainings = trainings.filter((t) => t.status !== '예정');
+    const counts = new Map();
+    for (const t of trainings) { const k = String(t.date).slice(0, 7); counts.set(k, (counts.get(k) || 0) + 1); }
+    const months = [...counts.keys()].sort();
+    if (!months.length) return [];
+    const out = [];
+    let [y, m] = months[0].split('-').map(Number);
+    const last = months[months.length - 1];
+    for (let guard = 0; guard < 240; guard++) {
+      const k = y + '-' + String(m).padStart(2, '0');
+      out.push({ month: k, count: counts.get(k) || 0 });
+      if (k === last) break;
+      m += 1; if (m > 12) { m = 1; y += 1; }
+    }
+    return out;
+  }
+});
+
+dash.calc('kpi', {
+  inputs: ['trainings', 'by_region', 'by_month'],
+  title: '누적 요약',
+  description: '전체 연수 수, 이노베이터 수, 연수가 열린 지역 수, 가장 최근 달의 연수 수와 전월 대비 변화를 계산해요.',
+  fn: (trainings, by_region, by_month) => {
+    trainings = trainings.filter((t) => t.status !== '예정');
+    const last = by_month[by_month.length - 1] || { month: '', count: 0 };
+    const prev = by_month[by_month.length - 2] || { count: 0 };
+    const active = by_region.filter((r) => r.count > 0);
+    return [{
+      total: trainings.length,
+      points: trainings.filter((t) => String(t.point || '').trim()).length,
+      innovators: new Set(trainings.map((t) => t.innovator)).size,
+      regions_active: active.length,
+      regions_total: by_region.length,
+      regions_waiting: by_region.length - active.length,
+      top_region: active.length ? active[0].region : '',
+      latest_month_label: last.month ? Number(last.month.slice(5)) + '월' : '',
+      latest_month_count: last.count,
+      change_vs_prev: last.count - prev.count,
+      latest_date: trainings.reduce((mx, t) => (t.date > mx ? t.date : mx), '')
+    }];
+  }
+});
+</script>
+
+<script>
+window.ixFail = () => {
+  const w = document.createElement('div');
+  w.className = 'ix-fail';
+  const dot = document.createElement('span');
+  dot.className = 'ix-fail-dot';
+  const tx = document.createElement('span');
+  tx.textContent = '불러오지 못했어요';
+  w.append(dot, tx);
+  return w;
+};
+window.ixDate = (s) => { const d = new Date(String(s).slice(0, 10) + 'T00:00:00Z'); return isNaN(d) ? String(s) : d3.utcFormat('%m.%d')(d); };
+window.ixTip = (host) => {
+  const tip = document.createElement('div');
+  tip.className = 'ix-tip';
+  tip.hidden = true;
+  host.append(tip);
+  return {
+    show(ev, lines) {
+      tip.replaceChildren(...lines.map((l, i) => { const d = document.createElement('div'); if (i === 0) d.className = 'ix-tip-k'; d.textContent = l; return d; }));
+      tip.hidden = false;
+      const hb = host.getBoundingClientRect();
+      const tw = tip.offsetWidth, th = tip.offsetHeight;
+      let x = ev.clientX - hb.left + 12, y = ev.clientY - hb.top - th - 8;
+      if (x + tw > hb.width) x = Math.max(0, ev.clientX - hb.left - tw - 12);
+      if (y < 0) y = ev.clientY - hb.top + 14;
+      tip.style.left = x + 'px';
+      tip.style.top = y + 'px';
+    },
+    hide() { tip.hidden = true; }
+  };
+};
+window.ixAnimated = window.ixAnimated || {};
+window.ixAnimOnce = (el, key) => {
+  if (window.ixAnimated[key]) { el.classList.remove('ix-anim'); return; }
+  window.ixAnimated[key] = true;
+  el.classList.add('ix-anim');
+};
+window.ixEl = (tag, cls, text) => { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; };
+window.ixAvatar = (name, px) => {
+  let h = 2166136261;
+  for (const ch of String(name)) { h ^= ch.codePointAt(0); h = Math.imul(h, 16777619) >>> 0; }
+  const pick = (arr, k) => arr[((h >>> (k * 3)) ^ (h >>> (k + 11))) % arr.length];
+  const hair = pick(['#3b2416', '#5a3a22', '#1d1d24', '#7a4a2a', '#a0522d', '#c4c4cc', '#d8b46a', '#6b2c2c'], 0);
+  const skin = pick(['#ffe2c6', '#f8d2ae', '#eebc93', '#d79f74'], 1);
+  const shirt = pick(['#ffffff', '#2f6fdf', '#e5483b', '#2fae6b', '#f5a623', '#7b4fd6', '#1f2a44', '#ff7eb6'], 2);
+  const pants = pick(['#1f5fbf', '#2a2f3a', '#3a7d44', '#6a3f1f', '#24345e'], 3);
+  const band = pick(['#1f6fd1', '#e5483b', '#f5a623', '#2fae6b', '#7b4fd6'], 4);
+  const style = pick(['band', 'plain', 'buns', 'long', 'band', 'cap'], 5);
+  const T = [
+    '....KKKKKK....',
+    '...KHHHHHHK...',
+    '..KHHHHHHHHK..',
+    '..KAAAAAAAAK..',
+    '.KHHSSSSSSHHK.',
+    '.KHSSSSSSSSHK.',
+    '.KHSESSSSESHK.',
+    '.KSSESSSSESSK.',
+    '.KSCSSMMSSCSK.',
+    '..KSSSSSSSSK..',
+    '.KKTTTTTTTTKK.',
+    'KSKTTUUUUTTKSK',
+    'KSKTTTTTTTTKSK',
+    '.KKPPPPPPPPKK.',
+    '..KPPPKKPPPK..',
+    '..KOOK..KOOK..'
+  ].map((r) => r.split(''));
+  if (style === 'buns') { T[0] = '.KK.KKKKKK.KK.'.split(''); T[1] = 'KHHKHHHHHHKHHK'.split(''); T[2] = '.KKHHHHHHHHKK.'.split(''); }
+  if (style === 'long') { T[9] = '.KHSSSSSSSSHK.'.split(''); T[10] = 'KHKTTTTTTTTKHK'.split(''); }
+  if (style === 'cap') { T[1] = '...KAAAAAAK...'.split(''); T[2] = '..KAAAAAAAAK..'.split(''); T[3] = '..KAAAAAAAAAAK'.split(''); }
+  const col = { K: '#141414', H: hair, A: style === 'band' || style === 'cap' ? band : hair, S: skin, E: '#1b1b1b', C: '#ffb0b0', M: '#e5484d', T: shirt, U: shirt === '#ffffff' ? '#d9dee8' : 'rgba(255,255,255,.35)', P: pants, O: '#2b2b2b' };
+  const c = document.createElement('canvas');
+  c.width = 14 * px;
+  c.height = 16 * px;
+  const x = c.getContext('2d');
+  T.forEach((row, ry) => row.forEach((ch, rx) => {
+    if (ch === '.') return;
+    x.fillStyle = col[ch];
+    x.fillRect(rx * px, ry * px, px, px);
+  }));
+  c.setAttribute('aria-hidden', 'true');
+  return c;
+};
+window.ixBrand = (name) => {
+  const d = dash.data('brand');
+  if (d.status !== 'ok') return null;
+  return d.data.find((r) => r.name === name) || null;
+};
+
+dash.draw('brand-logo', (el) => {
+  const b = window.ixBrand('logo');
+  el.replaceChildren();
+  if (!b) return;
+  const img = new Image();
+  img.src = b.src; img.alt = '마이클'; img.width = b.w; img.height = b.h;
+  el.append(img);
+});
+
+dash.draw('brand-mascot', (el) => {
+  const b = window.ixBrand('mascot');
+  el.replaceChildren();
+  if (!b) return;
+  const img = new Image();
+  img.src = b.src; img.alt = ''; img.width = b.w; img.height = b.h;
+  el.append(img);
+});
+
+dash.draw('points-feed', (el) => {
+  const d = dash.data('trainings');
+  el.classList.toggle('dash-skeleton', d.status === 'loading');
+  el.replaceChildren();
+  if (d.status === 'error') { el.append(window.ixFail()); return; }
+  if (d.status !== 'ok') return;
+  const E = window.ixEl;
+  const desc = (a, b) => String(b.date).localeCompare(String(a.date)) || String(b.id).localeCompare(String(a.id));
+  const rows = d.data.filter((r) => String(r.point || '').trim() && r.status !== '예정').sort(desc);
+  if (!rows.length) { el.append(E('p', 'ix-pt-empty', '아직 쌓인 포인트가 없어요. 연수를 마치면 핵심 포인트를 남겨 주세요!')); return; }
+  rows.forEach((r) => {
+    const item = E('article', 'ix-pt');
+    const av = window.ixAvatar(r.innovator, 3);
+    av.className = 'ix-pt-av';
+    const body = E('div', 'ix-pt-body');
+    const meta = E('p', 'ix-pt-meta');
+    meta.append(E('span', 'ix-date', window.ixDate(r.date)), ' · ', E('span', 'ix-region', r.region), ' · ', E('span', 'ix-name ix-teacher', r.innovator));
+    body.append(meta);
+    if (r.title) body.append(E('p', 'ix-pt-title', r.title));
+    body.append(E('p', 'ix-pt-text', String(r.point).trim()));
+    item.append(av, body);
+    el.append(item);
+  });
+});
+
+dash.draw('kpi', (el) => {
+  const d = dash.data('kpi');
+  const f = el.dataset.field;
+  el.classList.toggle('dash-skeleton', d.status === 'loading');
+  el.classList.remove('ix-up', 'ix-down');
+  if (d.status !== 'ok' || !d.data.length) { el.textContent = '—'; return; }
+  const v = d.data[0][f];
+  if (f === 'change_vs_prev') {
+    el.textContent = (v > 0 ? '+' : '') + v;
+    el.classList.toggle('ix-up', v > 0);
+    el.classList.toggle('ix-down', v < 0);
+    return;
+  }
+  el.textContent = typeof v === 'number' ? d3.format(',')(v) : (v || '—');
+});
+
+dash.draw('podium', (el) => {
+  const d = dash.data('ranking');
+  el.classList.toggle('dash-skeleton', d.status === 'loading');
+  el.replaceChildren();
+  if (d.status === 'error') { el.append(window.ixFail()); return; }
+  if (d.status !== 'ok') return;
+  const E = window.ixEl;
+  d.data.slice(0, 3).forEach((r, i) => {
+    const pod = E('div', 'ix-pod p' + (i + 1) + ' m' + Math.min(r.rank, 3));
+    const crown = E('div', 'ix-crown-box');
+    crown.append(E('div', 'ix-crown'));
+    const av = window.ixAvatar(r.innovator, 5);
+    av.className = 'ix-pod-av';
+    const name = E('div', 'ix-pod-name ix-teacher', r.innovator);
+    const reg = E('div', 'ix-pod-region', r.region);
+    const score = E('div', 'ix-pod-score', String(r.count));
+    score.append(E('small', null, '회'));
+    const ped = E('div', 'ix-pedestal', String(r.rank));
+    pod.append(crown, av, name, reg, score, ped);
+    el.append(pod);
+  });
+});
+
+document.querySelectorAll('.ix-search').forEach((inp) => inp.addEventListener('input', () => dash.draw('rank-body')));
+
+dash.draw('rank-body', (el) => {
+  const d = dash.data('ranking');
+  el.replaceChildren();
+  if (d.status !== 'ok') return;
+  const E = window.ixEl;
+  let q = '';
+  document.querySelectorAll('.ix-search').forEach((inp) => { q = q || inp.value.trim(); });
+  const max = d3.max(d.data, (r) => r.count) || 1;
+  const rows = q ? d.data.filter((r) => r.innovator.includes(q) || r.region.includes(q)) : d.data;
+  if (!rows.length) {
+    const tr = E('tr');
+    const td = E('td', 'ix-empty', 'GAME OVER… 찾는 이노베이터가 없어요');
+    td.colSpan = 5;
+    tr.append(td);
+    el.append(tr);
+    return;
+  }
+  for (const r of rows) {
+    const tr = E('tr', q ? 'ix-hit' : null);
+    tr.dataset.key = r.innovator;
+    const tdRank = E('td');
+    tdRank.append(E('span', 'ix-rank' + (r.rank <= 3 ? ' r' + r.rank : ''), String(r.rank)));
+    const tdName = E('td');
+    const sm = window.ixAvatar(r.innovator, 2);
+    sm.className = 'ix-av-sm';
+    tdName.append(sm, E('span', 'ix-name ix-teacher', r.innovator));
+    const tdReg = E('td', 'ix-region', r.region);
+    const tdCnt = E('td');
+    const wrap = E('div', 'ix-countcell');
+    const bar = E('span', 'ix-exp');
+    bar.style.width = Math.max(6, Math.round((r.count / max) * 80 / 8) * 8) + 'px';
+    wrap.append(bar, E('span', null, String(r.count)));
+    tdCnt.append(wrap);
+    const tdLast = E('td', 'ix-dim ix-narrow-hide', window.ixDate(r.last_date));
+    tr.append(tdRank, tdName, tdReg, tdCnt, tdLast);
+    el.append(tr);
+  }
+});
+
+dash.draw('region-map', (el) => {
+  const reg = dash.data('by_region'), geo = dash.data('korea_map'), who = dash.data('region_teachers');
+  const sts = [reg.status, geo.status, who.status];
+  el.classList.toggle('dash-skeleton', sts.includes('loading'));
+  el.replaceChildren();
+  if (sts.includes('error')) { el.append(window.ixFail()); return; }
+  if (sts.some((s) => s !== 'ok')) return;
+  window.ixAnimOnce(el, 'map');
+  const byReg = new Map(reg.data.map((r) => [r.region, r]));
+  const names = d3.group(who.data, (r) => r.region);
+  const max = d3.max(reg.data, (r) => r.count) || 1;
+  const ramp = d3.interpolateRgbBasis(['#FFF1DC', '#FBD49A', '#F5A623']);
+  const FULL = Math.max(10, max);
+  const cnt = (g) => (byReg.get(g.region) || { count: 0 }).count;
+  const color = (c) => (c > 0 ? ramp(0.12 + 0.88 * ((Math.min(c, FULL) - 1) / (FULL - 1))) : '#E8EDF4');
+  const W = 480, H = 620;
+  const uid = 'ixm' + Math.random().toString(36).slice(2, 8);
+  const svg = d3.select(el).append('svg').attr('viewBox', '0 0 ' + W + ' ' + H).attr('width', '100%').attr('role', 'img').attr('aria-label', '시·도별 연수 횟수 지도');
+  svg.append('rect').attr('x', 392).attr('y', 44).attr('width', 80).attr('height', 68).attr('fill', 'none').attr('stroke', '#9AA6BA').attr('stroke-opacity', 0.8).attr('stroke-dasharray', '3 3');
+  svg.append('text').attr('x', 432).attr('y', 126).attr('text-anchor', 'middle').attr('class', 'ix-map-note').text('울릉도 · 독도');
+  const tip = window.ixTip(el);
+  const hl = svg.append('path').attr('fill', 'none').attr('stroke', '#1b2236').attr('stroke-width', 2.5).attr('pointer-events', 'none').attr('opacity', 0);
+  const show = (ev, g) => {
+    const r = byReg.get(g.region) || { count: 0, innovators: 0 };
+    const list = names.get(g.region) || [];
+    const lines = [g.region];
+    if (!r.count) { lines.push('아직 연수가 없어요', '첫 번째 도전자를 기다려요!'); }
+    else {
+      lines.push('연수 ' + r.count + '회 · 이노베이터 ' + r.innovators + '명');
+      list.slice(0, 8).forEach((p) => lines.push('▸ ' + p.innovator + ' 선생님 (' + p.count + '회)'));
+      if (list.length > 8) lines.push('외 ' + (list.length - 8) + '명');
+    }
+    tip.show(ev, lines);
+    hl.attr('d', g.d).attr('opacity', 1);
+  };
+  const hide = () => { tip.hide(); hl.attr('opacity', 0); };
+  const regions = svg.insert('g', 'path').attr('class', 'ix-regs');
+  regions.selectAll('path').data(geo.data).join('path')
+    .attr('class', (g) => 'ix-reg' + (cnt(g) ? '' : ' ix-reg-zero'))
+    .attr('d', (g) => g.d)
+    .attr('fill', (g) => color(cnt(g)))
+    .style('animation-delay', (g, i) => i * 35 + 'ms')
+    .on('pointermove', show).on('click', show).on('pointerleave', hide);
+  const labels = svg.append('g').attr('pointer-events', 'none');
+  geo.data.forEach((g) => {
+    const c = cnt(g);
+    if (Number(g.leader)) {
+      labels.append('line').attr('x1', g.lx).attr('y1', g.ly).attr('x2', g.bx).attr('y2', g.by - 2).attr('class', 'ix-map-lead');
+      labels.append('circle').attr('cx', g.lx).attr('cy', g.ly).attr('r', 2.2).attr('class', 'ix-map-dot');
+    }
+    labels.append('text').attr('x', g.bx).attr('y', g.by - 8).attr('text-anchor', 'middle').attr('class', 'ix-map-name').text(g.region);
+    labels.append('text').attr('x', g.bx).attr('y', g.by + 10).attr('text-anchor', 'middle').attr('class', 'ix-map-num' + (c ? '' : ' zero')).text(c);
+  });
+  const lg = svg.append('g').attr('transform', 'translate(296,560)');
+  const grad = svg.append('defs').append('linearGradient').attr('id', uid);
+  d3.range(0, 1.0001, 0.1).forEach((s) => grad.append('stop').attr('offset', s).attr('stop-color', color(Math.max(1, s * FULL))));
+  lg.append('text').attr('x', 0).attr('y', -8).attr('class', 'ix-map-note').text('연수 횟수');
+  lg.append('rect').attr('x', 0).attr('y', 0).attr('width', 14).attr('height', 10).attr('fill', '#E8EDF4').attr('stroke', '#C9D2E0');
+  lg.append('text').attr('x', 7).attr('y', 24).attr('text-anchor', 'middle').attr('class', 'ix-map-note').text('0');
+  lg.append('rect').attr('x', 24).attr('y', 0).attr('width', 148).attr('height', 10).attr('fill', 'url(#' + uid + ')');
+  lg.append('text').attr('x', 24).attr('y', 24).attr('class', 'ix-map-note').text('1');
+  lg.append('text').attr('x', 172).attr('y', 24).attr('text-anchor', 'end').attr('class', 'ix-map-note').text(FULL + (FULL === 10 && max < 10 ? '회+' : '회'));
+});
+
+dash.draw('months', (el) => {
+  const d = dash.data('by_month');
+  el.classList.toggle('dash-skeleton', d.status === 'loading');
+  el.replaceChildren();
+  if (d.status === 'error') { el.append(window.ixFail()); return; }
+  if (d.status !== 'ok' || !d.data.length) return;
+  window.ixAnimOnce(el, 'months');
+  const rows = d.data;
+  const W = Math.max(280, el.clientWidth || 600), H = 250;
+  const m = { t: 26, r: 4, b: 28, l: 4 };
+  const x = d3.scaleBand(rows.map((r) => r.month), [m.l, W - m.r]).padding(0.26);
+  const y = d3.scaleLinear([0, (d3.max(rows, (r) => r.count) || 1) * 1.08], [H - m.b, m.t]);
+  const uid = 'ixp' + Math.random().toString(36).slice(2, 8);
+  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', '0 0 ' + W + ' ' + H);
+  const defs = svg.append('defs');
+  [['o', '#F5A623'], ['b', '#3BA4FF']].forEach(([k, c]) => {
+    defs.append('pattern').attr('id', uid + k).attr('patternUnits', 'userSpaceOnUse').attr('width', 8).attr('height', 8)
+      .append('rect').attr('width', 8).attr('height', 6).attr('fill', c);
+  });
+  svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', H - m.b + 1).attr('y2', H - m.b + 1).attr('stroke', '#2a5bbd').attr('stroke-width', 2);
+  const bw = Math.min(34, x.bandwidth());
+  const off = (x.bandwidth() - bw) / 2;
+  const lastM = rows[rows.length - 1].month;
+  const tip = window.ixTip(el);
+  const label = (k) => (k.slice(5) === '01' ? k.slice(2, 4) + '년 ' : '') + Number(k.slice(5)) + '월';
+  const g = svg.selectAll('g.ix-m').data(rows).join('g').attr('class', 'ix-m');
+  g.append('rect').attr('class', 'ix-mbar')
+    .attr('x', (r) => x(r.month) + off).attr('width', bw)
+    .attr('y', (r) => y(r.count)).attr('height', (r) => Math.max(0, y(0) - y(r.count)))
+    .attr('fill', (r) => 'url(#' + uid + (r.month === lastM ? 'o' : 'b') + ')')
+    .attr('opacity', (r) => (r.month === lastM ? 1 : 0.75))
+    .style('animation-delay', (r, i) => i * 50 + 'ms');
+  g.append('text').attr('x', (r) => x(r.month) + x.bandwidth() / 2).attr('y', (r) => y(r.count) - 7)
+    .attr('text-anchor', 'middle').attr('fill', (r) => (r.month === lastM ? '#F5A623' : '#F4F7FF'))
+    .style('font-family', 'ui-monospace,Menlo,Consolas,monospace').style('font-weight', 900).style('font-size', '13px')
+    .text((r) => (r.count ? r.count : ''));
+  const step = Math.ceil(36 / x.step());
+  g.append('text').attr('x', (r) => x(r.month) + x.bandwidth() / 2).attr('y', H - 8)
+    .attr('text-anchor', 'middle').attr('fill', '#9FB3D9').style('font-size', '12px').style('font-weight', 700)
+    .text((r, i) => (i % step === 0 || r.month === lastM ? label(r.month) : ''));
+  g.append('rect').attr('x', (r) => x(r.month)).attr('width', x.step()).attr('y', m.t).attr('height', H - m.t - m.b).attr('fill', 'transparent')
+    .on('mousemove', (ev, r) => tip.show(ev, [r.month.slice(0, 4) + '년 ' + Number(r.month.slice(5)) + '월', '연수 ' + r.count + '회']))
+    .on('mouseleave', () => tip.hide());
+});
+
+dash.draw('recent-body', (el) => {
+  const d = dash.data('trainings');
+  el.replaceChildren();
+  if (d.status !== 'ok') return;
+  const E = window.ixEl;
+  const desc = (a, b) => String(b.date).localeCompare(String(a.date)) || String(b.id).localeCompare(String(a.id));
+  const soon = d.data.filter((r) => r.status === '예정').sort(desc).slice(-5);
+  const done = d.data.filter((r) => r.status !== '예정').sort(desc).slice(0, 8);
+  for (const r of [...soon, ...done].sort(desc)) {
+    const tr = E('tr', r.status === '예정' ? 'ix-soon' : null);
+    tr.dataset.key = r.id;
+    const c3 = E('td');
+    c3.append(E('span', 'ix-name ix-teacher', r.innovator));
+    tr.append(E('td', 'ix-date', window.ixDate(r.date)), E('td', 'ix-region', r.region), c3, E('td', 'ix-narrow-hide', r.title || ''));
+    el.append(tr);
+  }
+});
+
+dash.draw('title-art', (el) => {
+  const host = el.closest('.ix-title');
+  const lines = [];
+  if (host) host.querySelectorAll('[data-line]').forEach((s) => {
+    const sub = s.dataset.line === 'sub';
+    lines.push({ text: s.textContent.trim(), size: sub ? 13 : 18, align: sub ? 'right' : 'center' });
+  });
+  const fonts = dash.data('fonts');
+  if (fonts.status === 'ok' && !window.ixFontsAdded && typeof FontFace === 'function') {
+    window.ixFontsAdded = true;
+    const fams = { barun: 'IX Barun', nexon: 'IX Nexon' };
+    const loads = [];
+    fonts.data.forEach((r) => {
+      try {
+        const bin = atob(r.b64);
+        const u8 = new Uint8Array(bin.length);
+        for (let i = 0; i < bin.length; i++) u8[i] = bin.charCodeAt(i);
+        const ff = new FontFace(fams[r.name] || r.name, u8.buffer, { weight: String(r.weight), display: 'swap' });
+        document.fonts.add(ff);
+        loads.push(ff.load());
+      } catch (e) { /* keep the fallback font */ }
+    });
+    Promise.all(loads).then(() => dash.draw('title-art')).catch(() => {});
+  }
+  if (!lines.length) { el.textContent = '—'; return; }
+  const FONT = "'IX Nexon','NEXON Lv1 Gothic OTF','Apple SD Gothic Neo','Malgun Gothic','Noto Sans KR',sans-serif";
+  const grids = lines.map((ln) => {
+    const c = document.createElement('canvas');
+    const x = c.getContext('2d');
+    x.font = '900 ' + ln.size + 'px ' + FONT;
+    c.width = Math.ceil(x.measureText(ln.text).width) + 2;
+    c.height = Math.ceil(ln.size * 1.4);
+    x.font = '900 ' + ln.size + 'px ' + FONT;
+    x.textBaseline = 'middle';
+    x.fillStyle = '#000';
+    x.fillText(ln.text, 1, c.height / 2);
+    const px = x.getImageData(0, 0, c.width, c.height).data;
+    const on = [];
+    for (let r = 0; r < c.height; r++) {
+      const row = [];
+      for (let q = 0; q < c.width; q++) row.push(px[(r * c.width + q) * 4 + 3] > 110);
+      on.push(row);
+    }
+    let top = 0, bot = on.length - 1;
+    while (top < bot && !on[top].some(Boolean)) top++;
+    while (bot > top && !on[bot].some(Boolean)) bot--;
+    return { align: ln.align, cells: on.slice(top, bot + 1), cols: c.width };
+  });
+  const gapRows = 3, depth = 4;
+  const cols = Math.max(...grids.map((g) => g.cols)) + 2;
+  const rows = grids.reduce((s, g) => s + g.cells.length, 0) + gapRows * (grids.length - 1) + 2;
+  const avail = Math.min(el.clientWidth || 600, 760);
+  const cell = Math.max(3, Math.min(9, Math.floor(avail / (cols + depth))));
+  const dpr = window.devicePixelRatio || 1;
+  const W = Math.ceil((cols + depth) * cell), H = Math.ceil((rows + depth) * cell);
+  const cv = document.createElement('canvas');
+  cv.width = Math.round(W * dpr);
+  cv.height = Math.round(H * dpr);
+  cv.style.width = W + 'px';
+  const ctx = cv.getContext('2d');
+  ctx.scale(dpr, dpr);
+  const dots = [];
+  let y0 = 1;
+  grids.forEach((g) => {
+    const off = g.align === 'right' ? cols - 1 - g.cols : Math.floor((cols - g.cols) / 2);
+    g.cells.forEach((row, r) => row.forEach((v, q) => { if (v) dots.push([off + q, y0 + r]); }));
+    y0 += g.cells.length + gapRows;
+  });
+  const baseX = depth * cell * 0.3;
+  const layer = (dx, dy, rad, color) => {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    for (const [c, r] of dots) {
+      const cx = baseX + (c + 0.5) * cell + dx, cy = (r + 0.5) * cell + dy;
+      ctx.moveTo(cx + rad, cy);
+      ctx.arc(cx, cy, rad, 0, Math.PI * 2);
+    }
+    ctx.fill();
+  };
+  const R = cell * 0.43;
+  for (let k = depth; k >= 1; k--) {
+    const color = k === depth ? '#8E0F07' : k === 1 ? '#FF6A13' : '#E0261B';
+    layer(-k * cell * 0.28, k * cell * 0.55, R, color);
+  }
+  layer(0, 0, R, '#FFE03A');
+  layer(-cell * 0.13, -cell * 0.13, cell * 0.15, '#FFF7C2');
+  el.replaceChildren(cv);
+});
+
+const named = document.getElementById(location.hash.slice(1));
+if (named) named.scrollIntoView();
+
+</script>
+</div>
+<script>ixDashStart();</script>
+</body>
+</html>
