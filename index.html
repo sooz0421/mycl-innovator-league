@@ -253,6 +253,12 @@ export default league;</pre>
       <p class="ix-stat-note"><b data-draw="kpi" data-source="kpi" data-field="latest_date" data-row="0">—</b> 기준</p>
     </div>
     <div class="ix-stat ix-panel">
+      <p class="ix-stat-en">TOTAL TRAINEES</p>
+      <p class="ix-stat-ko">누적 수강자</p>
+      <p class="ix-stat-val"><b data-draw="kpi" data-source="kpi" data-field="attendees_total" data-row="0">—</b><span class="ix-u">명</span></p>
+      <p class="ix-stat-note">인원이 기록된 연수 <b data-draw="kpi" data-source="kpi" data-field="attendees_n" data-row="0">—</b>건 기준</p>
+    </div>
+    <div class="ix-stat ix-panel">
       <p class="ix-stat-en">PLAYERS</p>
       <p class="ix-stat-ko">연수를 연 이노베이터</p>
       <p class="ix-stat-val"><b data-draw="kpi" data-source="kpi" data-field="innovators" data-row="0">—</b><span class="ix-u">명</span></p>
@@ -440,6 +446,8 @@ dash.calc('kpi', {
     return [{
       total: trainings.length,
       points: trainings.filter((t) => String(t.point || '').trim()).length,
+      attendees_total: trainings.reduce((s, t) => s + (Number(t.attendees) > 0 ? Number(t.attendees) : 0), 0),
+      attendees_n: trainings.filter((t) => Number(t.attendees) > 0).length,
       top_score: Math.max(0, ...trainings.reduce((m, t) => m.set(t.innovator, (m.get(t.innovator) || 0) + 1), new Map()).values()),
       innovators: new Set(trainings.map((t) => t.innovator)).size,
       regions_active: active.length,
