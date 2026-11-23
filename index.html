@@ -186,6 +186,14 @@ body{min-height:100vh;}
 .ix-pt-meta{font-size:12px;color:var(--g-muted);}
 .ix-pt-title{font-size:13px;font-weight:700;color:var(--g-orange);}
 .ix-pt-text{font-size:14px;line-height:1.6;color:#fff;white-space:pre-wrap;word-break:keep-all;overflow-wrap:anywhere;}
+.ix-pts-nav{display:flex;align-items:center;justify-content:center;gap:14px;margin-top:14px;}
+.ix-pts-btn{font-family:var(--ix-head);font-size:14px;font-weight:700;color:#fff;background:rgba(59,164,255,.18);border:2px solid rgba(59,164,255,.7);padding:6px 14px;cursor:pointer;box-shadow:3px 3px 0 rgba(0,0,0,.45);}
+.ix-pts-btn:hover:not(:disabled){background:var(--g-orange);border-color:var(--g-orange);color:#1a1033;}
+.ix-pts-btn:active:not(:disabled){transform:translate(2px,2px);box-shadow:1px 1px 0 rgba(0,0,0,.45);}
+.ix-pts-btn:disabled{opacity:.35;cursor:default;}
+.ix-pts-btn:focus-visible{outline:2px solid #fff;outline-offset:2px;}
+.ix-pts-page{font-family:var(--ix-head);font-size:14px;color:var(--g-muted);letter-spacing:.06em;min-width:5.5em;text-align:center;}
+.ix-pts-page b{color:var(--g-orange);}
 .ix-pt-empty{grid-column:1/-1;margin:0;padding:18px;text-align:center;font-family:var(--ix-body);font-size:14px;color:var(--g-muted);border:2px dashed rgba(59,164,255,.3);}
 .ix-card-note b{color:var(--g-orange);font-family:var(--ix-head);}
 .ix-contact{margin:6px 0 0;padding:6px 14px;font-family:var(--ix-body);font-size:13px;font-weight:700;color:#fff;background:rgba(3,8,23,.35);border:1px solid rgba(255,255,255,.25);border-radius:999px;}
@@ -347,7 +355,7 @@ export default league;</pre>
       <h2>주요 연수 포인트</h2>
       <p class="ix-card-note">연수에서 나온 좋은 반응과 꿀팁을 차곡차곡 쌓아요 · 지금까지 <b data-draw="kpi" data-source="kpi" data-field="points" data-row="0">—</b>개</p>
     </div>
-    <div class="ix-pts" data-draw="points-feed" data-source="trainings"></div>
+    <div class="ix-pts-wrap" data-draw="points-feed" data-source="trainings"></div>
   </section>
 
   <div class="ix-foot">
@@ -620,10 +628,15 @@ dash.draw('points-feed', (el) => {
   if (d.status === 'error') { el.append(window.ixFail()); return; }
   if (d.status !== 'ok') return;
   const E = window.ixEl;
+  const PER = 12;
   const desc = (a, b) => String(b.date).localeCompare(String(a.date)) || String(b.id).localeCompare(String(a.id));
   const rows = d.data.filter((r) => String(r.point || '').trim() && r.status !== '예정').sort(desc);
-  if (!rows.length) { el.append(E('p', 'ix-pt-empty', '아직 쌓인 포인트가 없어요. 연수를 마치면 핵심 포인트를 남겨 주세요!')); return; }
-  rows.forEach((r) => {
+  const grid = E('div', 'ix-pts');
+  el.append(grid);
+  if (!rows.length) { grid.append(E('p', 'ix-pt-empty', '아직 쌓인 포인트가 없어요. 연수를 마치면 핵심 포인트를 남겨 주세요!')); return; }
+  const pages = Math.ceil(rows.length / PER);
+  let page = Math.min(Number(el.dataset.page) || 0, pages - 1);
+  const card = (r) => {
     const item = E('article', 'ix-pt');
     const av = window.ixAvatar(r.innovator, 3);
     av.className = 'ix-pt-av';
@@ -634,8 +647,39 @@ dash.draw('points-feed', (el) => {
     if (r.title) body.append(E('p', 'ix-pt-title', r.title));
     body.append(E('p', 'ix-pt-text', String(r.point).trim()));
     item.append(av, body);
-    el.append(item);
-  });
+    return item;
+  };
+  const show = () => {
+    el.dataset.page = page;
+    grid.replaceChildren(...rows.slice(page * PER, page * PER + PER).map(card));
+    if (nav) {
+      prev.disabled = page === 0;
+      next.disabled = page === pages - 1;
+      label.replaceChildren(E('b', null, String(page + 1)), ' / ' + pages);
+    }
+  };
+  let nav = null, prev, next, label;
+  if (pages > 1) {
+    nav = E('div', 'ix-pts-nav');
+    prev = E('button', 'ix-pts-btn', '◀ PREV');
+    next = E('button', 'ix-pts-btn', 'NEXT ▶');
+    prev.type = next.type = 'button';
+    prev.setAttribute('aria-label', '이전 포인트 보기');
+    next.setAttribute('aria-label', '다음 포인트 보기');
+    label = E('span', 'ix-pts-page');
+    label.setAttribute('aria-live', 'polite');
+    const go = (dir) => {
+      page = Math.max(0, Math.min(pages - 1, page + dir));
+      show();
+      const top = el.closest('section');
+      if (top && top.getBoundingClientRect().top < 0) top.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+    prev.addEventListener('click', () => go(-1));
+    next.addEventListener('click', () => go(1));
+    nav.append(prev, label, next);
+    el.append(nav);
+  }
+  show();
 });
 
 dash.draw('kpi', (el) => {
